@@ -18865,36 +18865,74 @@ var ListManager = React.createClass({
     return { items: [], newItemText: '' };
   },
   onChange: function (e) {
+    //Update the state property every time a keystroke is typed
     this.setState({ newItemText: e.target.value });
   },
   handleSubmit: function (e) {
+    //stop the button from getting clicks since we are using form onsubmit
     e.preventDefault();
 
+    //Grab the current listo f items
     var currentItems = this.state.items;
 
+    //Add the new item to the List
     currentItems.push(this.state.newItemText);
+
+    //Update the main item list with the new listand clear the newItemText
     this.setState({ items: currentItems, newItemText: '' });
   },
   render: function () {
+    //onchange is called with every keystroke so we can store the most recent data entered
+    //value is what the user sees in the input box - we point this to newItemText so it udpate on every
+    var divStyle = {
+      marginTop: 10
+    };
+
+    var headingStyle = {};
+
+    if (this.props.headingColor) {
+      headingStyle.background = this.props.headingColor;
+    }
+
     return React.createElement(
       'div',
-      null,
+      { style: divStyle, className: 'col-sm-4' },
       React.createElement(
-        'h3',
-        null,
-        this.props.title
-      ),
-      React.createElement(
-        'form',
-        { onSubmit: this.handleSubmit },
-        React.createElement('input', { onChange: this.onChange, value: this.state.newItemText, type: 'text' }),
+        'div',
+        { className: 'panel panel-primary' },
         React.createElement(
-          'button',
-          null,
-          'Add'
-        )
-      ),
-      React.createElement(List, { items: this.state.items })
+          'div',
+          { style: headingStyle, className: 'panel-heading' },
+          React.createElement(
+            'h3',
+            null,
+            this.props.title
+          )
+        ),
+        React.createElement(
+          'div',
+          { className: 'panel-body' },
+          React.createElement(
+            'form',
+            { onSubmit: this.handleSubmit },
+            React.createElement(
+              'div',
+              { className: 'col-sm-9' },
+              React.createElement('input', { className: 'form-control', onChange: this.onChange, value: this.state.newItemText, type: 'text' })
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-sm-2' },
+              React.createElement(
+                'button',
+                { style: headingStyle, className: 'btn btn-primary' },
+                'Add'
+              )
+            )
+          )
+        ),
+        React.createElement(List, { items: this.state.items })
+      )
     );
   }
 });
@@ -18907,5 +18945,7 @@ var ReactDOM = require('react-dom');
 var ListManager = require('./components/ListManager.jsx');
 
 ReactDOM.render(React.createElement(ListManager, { title: 'Ingredients' }), document.getElementById('ingredients'));
+ReactDOM.render(React.createElement(ListManager, { title: 'ToDo' }), document.getElementById('todo'));
+ReactDOM.render(React.createElement(ListManager, { title: 'Christmas', headingColor: '#b31217' }), document.getElementById('christmas'));
 
 },{"./components/ListManager.jsx":160,"react":157,"react-dom":1}]},{},[161]);
